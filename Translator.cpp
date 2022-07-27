@@ -22,6 +22,7 @@ bool Translator::TranslateByGoogle()
     QString SourceText=ui->Source_Edit->toPlainText(); //获取待翻译的文本
     QNetworkRequest request;
     request.setUrl(QUrl("http://translate.google.cn/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q="+SourceText));
+    //http://translate.google.com/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl=zh_CN&q=test
 
     //    QVariant userAgent=
     //    request.setHeader(QNetworkRequest::UserAgentHeader, m_userAgent);
