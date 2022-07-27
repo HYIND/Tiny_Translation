@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Loading.gif</file>
+        <file>switch.png</file>
+    </qresource>
+</RCC>

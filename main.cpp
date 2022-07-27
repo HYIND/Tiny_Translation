@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     Translator tran;
-    MainWindow w;
-    w.show();
+    MainWindow mainwindow;
+    mainwindow.show();
     return a.exec();
 }

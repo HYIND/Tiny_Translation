@@ -7,8 +7,13 @@
 class Translator:public QObject
 {
 public:
+    Ui::MainWindow *ui = nullptr;
+    QMainWindow* mainwindow;
+
     Translator(){}
-    bool TranslateByGoogle();
+    void Tranlate_front();
+    bool TranslateByGoogle(QString& in,QString& out,QString intype,QString outtype);
+
 };
 
 void ui_init(Ui::MainWindow *ui_ptr);
