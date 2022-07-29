@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     tran.mainwindow=this;
     tran.main_ui=ui;
+    Tray_Init();
 }
 
 MainWindow::~MainWindow()
@@ -29,42 +30,41 @@ void MainWindow::on_SwitchButton_clicked()
 }
 
 
-//MyApplication::MyApplication(int &argc, char *argv[]):QApplication(argc,argv)
-//{
-//}
+void MainWindow::changeEvent(QEvent * event)
+{
+    if (this->windowState() == Qt::WindowMinimized)
+    {
+        this->hide();
+        mSysTrayIcon->show();
+    }
+}
 
-//MyApplication::~MyApplication()
-//{
-//}
+void MainWindow::Tray_Init()
+{
+       mSysTrayIcon = new QSystemTrayIcon(this);
+       QIcon icon = QIcon(":/switch.png");    //托盘icon
+       mSysTrayIcon->setIcon(icon);
+       mSysTrayIcon->setToolTip(QObject::tr("Tiny Translation"));       //当鼠标移动到托盘上的图标时，显示此处设置的内容
+       connect(mSysTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+               this,SLOT(on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason)));
+}
 
-//void MyApplication::MouseMoveEvent(QMouseEvent *p)
-//{
-//    QPoint p_ab = p->globalPos();//整个桌面位置
-//    QString str;
-//    str = QString("%1 , %2").arg(p_ab.x()).arg(p_ab.y());
-//    qDebug()<<str;
-//}
-
-//bool MyApplication::notify(QObject *obj, QEvent *event)
-//{
-//    if(event->type()==QMouseEvent::MouseMove)
-//    {
-//        QMouseEvent *mouseevent=(QMouseEvent *)event;
-//        QPoint p_ab = mouseevent->globalPos();//整个桌面位置
-//        QString str;
-//        str = QString("%1 , %2").arg(p_ab.x()).arg(p_ab.y());
-//        qDebug()<<str;
-//    }
-//    return QApplication::notify(obj,event);
-//}
-
-//void mouseMoveEvent(QMouseEvent *event)
-//{
-//    QPoint p_ab = event->globalPos();//整个桌面位置
-//    QString str;
-//    str = QString("%1 , %2").arg(p_ab.x()).arg(p_ab.y());
-//    qDebug()<<str;
-//}
+void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason)
+{
+    switch(reason){
+    case QSystemTrayIcon::Trigger:
+        //单击托盘图标
+        break;
+    case QSystemTrayIcon::DoubleClick:
+        //双击托盘图标
+        //双击后显示主程序窗口
+        this->show();
+        mSysTrayIcon->hide();
+        break;
+    default:
+        break;
+    }
+}
 
 void MainWindow::on_Switch_Delimit_clicked()
 {

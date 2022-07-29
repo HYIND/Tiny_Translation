@@ -19,12 +19,13 @@ LRESULT CALLBACK mouseProc(int nCode,WPARAM wParam,LPARAM lParam)
             //        ||wParam==WM_LBUTTONUP//鼠标左键弹起的消息
             //        ||wParam==WM_MOUSEMOVE)//鼠标的移动
 
-            if(wParam==WM_MOUSEMOVE)
-            {
-                //            PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
-                //            MoveX=mouse->pt.x,
-                //            MoveY=mouse->pt.y;
-            }
+//            if(wParam==WM_MOUSEMOVE)
+//            {
+//                            PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
+//                            qDebug()<<mouse->pt.x<<mouse->pt.y;
+//                            MoveX=mouse->pt.x;
+//                            MoveY=mouse->pt.y;
+//            }
             if(wParam==WM_LBUTTONUP)//左键弹起
             {
                 PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
