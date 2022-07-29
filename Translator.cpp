@@ -13,6 +13,14 @@
 #include <QMessageBox>
 #include <QLabel>
 #include <QMovie>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QClipboard>
+#include <QMimeData>
+#include <windows.h>
+#include <QWaitcondition>
+
+Translator tran;
 
 void Translator::Tranlate_front()
 {
@@ -25,21 +33,24 @@ void Translator::Tranlate_front()
     waiting->setMovie(m_move);
 
 
-    QString SourceText=ui->Source_Edit->toPlainText(); //获取待翻译的文本
+    QString SourceText=main_ui->Source_Edit->toPlainText(); //获取待翻译的文本
     QString TargetText;
 
-    QString intype=ui->label->text()=="英语"?"en":"zh_CN";
-    QString outtype=ui->label_2->text()=="英语"?"en":"zh_CN";
+    QString intype=main_ui->label->text()=="英语"?"en":"zh_CN";
+    QString outtype=main_ui->label_2->text()=="英语"?"en":"zh_CN";
 
     m_move->start();
     waiting->show();
 
-
-    TranslateByGoogle(SourceText,TargetText,intype,outtype);
+    if(!TranslateByGoogle(SourceText,TargetText,intype,outtype))
+    {
+        QMessageBox::warning(mainwindow,"请求异常","请求失败，请检查网络连接！", QMessageBox::Ok, QMessageBox::Ok);
+        return;
+    }
 
     m_move->stop();
     waiting->hide();
-    ui->Target_Edit->setText(TargetText);
+    main_ui->Target_Edit->setText(TargetText);
 }
 bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QString outtype)
 {
@@ -69,9 +80,8 @@ bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QStri
         if (pReply->error() != QNetworkReply::NoError)
         {
             // 错误处理
-            QMessageBox::warning(mainwindow,"网络连接异常","请求失败，请检查网络连接！", QMessageBox::Ok, QMessageBox::Ok);
             qDebug()<<"GoogleAPI::postHttp() QNetworkReply Error String : " << pReply->errorString();
-            return -1;
+            return false;
         }
         else
         {
@@ -80,7 +90,7 @@ bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QStri
             //如果有错误的序列号
             int errorIndex = data.indexOf("error_code");
             if (errorIndex != -1)
-                return errorIndex;
+                return false;
 
             //json解析
             QJsonParseError jsonError;
@@ -116,7 +126,7 @@ bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QStri
                     }
                 }
             }
-            return 0;
+            return true;
         }
     }
     else
@@ -124,9 +134,42 @@ bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QStri
         disconnect(pReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         pReply->abort();
         pReply->deleteLater();
-        QMessageBox::warning(mainwindow,"请求超时","请求超时，请检查网络连接！", QMessageBox::Ok, QMessageBox::Ok);
         qDebug()<<"QNetworkReply Timeout";
-        return -1;
+        return false;
     }
-    return 0;
+    return true;
+}
+
+void Translator::Tranlate_back_emit()
+{
+    emit back_tran();
+}
+
+void Translator::Tranlate_back()
+{
+    static QString last;
+    //复制选中内容到剪切板
+    keybd_event(VK_CONTROL,0,0,0);
+    keybd_event('C',0,0,0);
+    keybd_event('C',0,KEYEVENTF_KEYUP,0);
+    keybd_event(VK_CONTROL,0,KEYEVENTF_KEYUP,0);
+    _sleep(100);
+    QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *mimeData = clipboard->mimeData();
+
+    if (mimeData->hasImage()) {
+        return;
+    }
+    else if (mimeData->hasText()) {
+        QString source=mimeData->text();
+        if(source!="")
+        {
+            if(source==last)
+                return;
+            last =source;
+            QString out;
+            TranslateByGoogle(source,out);
+            emit back_tran_finish(out);
+        }
+    }
 }

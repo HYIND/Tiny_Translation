@@ -2,20 +2,32 @@
 #define TRANSLATOR_H
 
 #include "mainwindow.h"
+#include "delimit_window.h"
 #include "ui_mainwindow.h"
+#include "ui_delimit_window.h"
 
 class Translator:public QObject
 {
+    Q_OBJECT
 public:
-    Ui::MainWindow *ui = nullptr;
+    Ui::MainWindow *main_ui = nullptr;
+    Ui::delimit_window *back_ui = nullptr;
+
+    QWidget *back_widget = nullptr;
     QMainWindow* mainwindow;
 
     Translator(){}
     void Tranlate_front();
-    bool TranslateByGoogle(QString& in,QString& out,QString intype,QString outtype);
-
+    bool TranslateByGoogle(QString& in,QString& out,QString intype="en",QString outtype="zh_CN");
+    void Tranlate_back_emit();
+signals:
+    void back_tran();
+    void back_tran_finish(QString &string);
+public slots:
+    void Tranlate_back();
 };
 
-void ui_init(Ui::MainWindow *ui_ptr);
+
+extern Translator tran;
 
 #endif // TRANSLATOR_H

@@ -1,6 +1,5 @@
 #include "mainwindow.h"
-
-#include <QApplication>
+#include "delimit_window.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,5 +7,8 @@ int main(int argc, char *argv[])
     Translator tran;
     MainWindow mainwindow;
     mainwindow.show();
+    delimit_window dw;
+    //    ::setMouseTracking(true);
+        SetMouseHook();
     return a.exec();
 }
