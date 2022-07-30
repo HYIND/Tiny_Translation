@@ -39,7 +39,7 @@ void MainWindow::Tray_Init()
     mSysTrayIcon = new QSystemTrayIcon(this);
     QIcon icon = QIcon(":/switch.png");    //托盘icon
     mSysTrayIcon->setIcon(icon);
-    mSysTrayIcon->setToolTip(QObject::tr("Tiny Translation\n划词翻译已关闭\n快捷键：CTRL+ALT+T"));       //当鼠标移动到托盘上的图标时，显示此处设置的内容
+    mSysTrayIcon->setToolTip("Tiny Translation\n划词翻译已关闭\n快捷键：CTRL+ALT+T");       //当鼠标移动到托盘上的图标时，显示此处设置的内容
 
     QMenu* menu = new QMenu(this);
     toggle_action = new QAction(menu);
@@ -135,13 +135,13 @@ void MainWindow::on_Switch_Delimit_clicked()
     {
         ui->Switch_Delimit->setText("关闭划词");
         toggle_action->setText("关闭划词");
-        mSysTrayIcon->setToolTip(QObject::tr("Tiny Translation\n划词翻译已关闭\n开启快捷键：CTRL+ALT+T"));
+        mSysTrayIcon->setToolTip("Tiny Translation\n划词翻译已开启\n关闭快捷键：CTRL+ALT+T");
     }
     else
     {
         ui->Switch_Delimit->setText("开启划词");
         toggle_action->setText("开启划词");
-        mSysTrayIcon->setToolTip(QObject::tr("Tiny Translation\n划词翻译已开启\n关闭快捷键：CTRL+ALT+T"));
+        mSysTrayIcon->setToolTip("Tiny Translation\n划词翻译已关闭\n开启快捷键：CTRL+ALT+T");
     }
 }
 
