@@ -15,8 +15,6 @@
 #include <QMovie>
 #include <QKeyEvent>
 #include <QEvent>
-#include <QClipboard>
-#include <QMimeData>
 #include <windows.h>
 #include <QWaitcondition>
 
@@ -24,8 +22,8 @@ Translator tran;
 
 void Translator::Tranlate_front()
 {
-    QLabel *waiting = new QLabel(mainwindow);
-    waiting->setGeometry(mainwindow->width()/2-50,mainwindow->height()/2-100,100,100);
+    QLabel *waiting = new QLabel(pmainwindow);
+    waiting->setGeometry(pmainwindow->width()/2-50,pmainwindow->height()/2-100,100,100);
     waiting->setAlignment(Qt::AlignCenter);
     waiting->setStyleSheet("background:transparent");
     QMovie *m_move = new QMovie(":/Loading.gif");
@@ -44,7 +42,7 @@ void Translator::Tranlate_front()
 
     if(!TranslateByGoogle(SourceText,TargetText,intype,outtype))
     {
-        QMessageBox::warning(mainwindow,"请求异常","请求失败，请检查网络连接！", QMessageBox::Ok, QMessageBox::Ok);
+        QMessageBox::warning(pmainwindow,"请求异常","请求失败，请检查网络连接！", QMessageBox::Ok, QMessageBox::Ok);
         return;
     }
 
@@ -147,29 +145,53 @@ void Translator::Tranlate_back_emit()
 
 void Translator::Tranlate_back()
 {
-    static QString last;
     //复制选中内容到剪切板
+    QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *mimeData = clipboard->mimeData();
+    QString last=clipboard->text();
+
+    QMimeData *clipData = new QMimeData();
+        for(int i = 0; i < mimeData->formats().size(); i++)       //保存剪切板中数据
+        {
+            QString type = mimeData->formats().at(i);        //保存剪切板中数据格式
+            QByteArray data = mimeData->data(type);       //按照数据格式保存数据
+            clipData->setData(type,data);
+        }
+
     keybd_event(VK_CONTROL,0,0,0);
     keybd_event('C',0,0,0);
     keybd_event('C',0,KEYEVENTF_KEYUP,0);
     keybd_event(VK_CONTROL,0,KEYEVENTF_KEYUP,0);
     _sleep(100);
-    QClipboard *clipboard = QApplication::clipboard();
-    const QMimeData *mimeData = clipboard->mimeData();
 
-    if (mimeData->hasImage()) {
+    QString source=clipboard->text();
+    if(source.isEmpty()||source==last)
+    {
+        delete clipData;
         return;
     }
-    else if (mimeData->hasText()) {
-        QString source=mimeData->text();
-        if(source!="")
-        {
-            if(source==last)
-                return;
-            last =source;
-            QString out;
-            TranslateByGoogle(source,out);
-            emit back_tran_finish(out);
-        }
-    }
+     qDebug()<<source;
+    QString out;
+    TranslateByGoogle(source,out);
+    emit back_tran_finish(out,clipData);
+
+//    if (mimeData->hasImage()) {
+//        return;
+//    }
+//    else if(mimeData->hasUrls()){
+//        return;
+//    }
+//    else if (mimeData->hasText()) {
+//        QString source=mimeData->text();
+//        if(source!="")
+//        {
+////            if(source==last)
+////                return;
+//                    qDebug()<<source;
+////            last =source;
+//            QString out;
+//            TranslateByGoogle(source,out);
+//            emit back_tran_finish(out,clipData);
+//        }
+//    }
 }

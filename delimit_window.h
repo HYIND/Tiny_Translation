@@ -20,9 +20,10 @@ private:
     Ui::delimit_window *ui;
 
 public slots:
-    void tran_finish(QString &string);
+    void tran_finish(QString &string,QMimeData* oldmimedata);
 };
 
-extern QThread *back_thread;
+
+extern delimit_window* pdw;
 
 #endif // DELIMIT_WINDOW_H

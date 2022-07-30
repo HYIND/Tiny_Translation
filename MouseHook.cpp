@@ -1,10 +1,11 @@
 #include <windows.h>
 #include <windowsx.h>
 #include "Translator.h"
-
+#include "time.h"
 
 HHOOK mouseHook=NULL;
 int MoveX, MoveY;
+clock_t down_time=0,up_time=0;
 bool Delimit_toggle=false;
 LRESULT CALLBACK mouseProc(int nCode,WPARAM wParam,LPARAM lParam)
 {
@@ -19,19 +20,28 @@ LRESULT CALLBACK mouseProc(int nCode,WPARAM wParam,LPARAM lParam)
             //        ||wParam==WM_LBUTTONUP//鼠标左键弹起的消息
             //        ||wParam==WM_MOUSEMOVE)//鼠标的移动
 
-//            if(wParam==WM_MOUSEMOVE)
-//            {
-//                            PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
-//                            qDebug()<<mouse->pt.x<<mouse->pt.y;
-//                            MoveX=mouse->pt.x;
-//                            MoveY=mouse->pt.y;
-//            }
+            //            if(wParam==WM_MOUSEMOVE)
+            //            {
+            //                            PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
+            //                            qDebug()<<mouse->pt.x<<mouse->pt.y;
+            //                            MoveX=mouse->pt.x;
+            //                            MoveY=mouse->pt.y;
+            //            }
+            if(wParam==WM_LBUTTONDOWN)//左键按下
+            {
+                down_time=clock();
+            }
+
             if(wParam==WM_LBUTTONUP)//左键弹起
             {
-                PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
-                MoveX=mouse->pt.x,
-                MoveY=mouse->pt.y;
-                tran.Tranlate_back_emit();
+                up_time=clock();
+                if(up_time-down_time>100)
+                {
+                    PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
+                    MoveX=mouse->pt.x,
+                    MoveY=mouse->pt.y;
+                    tran.Tranlate_back_emit();
+                }
             }
         }
     }

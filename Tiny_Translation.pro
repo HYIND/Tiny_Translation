@@ -10,11 +10,12 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 LIBS += \
-    -lGdi32
-
+    -lGdi32\
+    -lUser32
 
 SOURCES += \
     MouseHook.cpp \
+    MyTextBrowser.cpp \
     Translator.cpp \
     delimit_window.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     MouseHook.h \
+    MyTextBrowser.h \
     Translator.h \
     delimit_window.h \
     mainwindow.h
