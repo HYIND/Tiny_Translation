@@ -35,7 +35,7 @@ LRESULT CALLBACK mouseProc(int nCode,WPARAM wParam,LPARAM lParam)
             if(wParam==WM_LBUTTONUP)//左键弹起
             {
                 up_time=clock();
-                if(up_time-down_time>100)
+                if(up_time-down_time>150)
                 {
                     PMSLLHOOKSTRUCT mouse = (PMSLLHOOKSTRUCT)lParam;
                     MoveX=mouse->pt.x,
