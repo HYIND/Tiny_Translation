@@ -8,4 +8,4 @@
 
 目前使用的是Google翻译的API，需科学上网，后续将会支持其他API。
 
-https://github.com/HYIND/Tiny_Translation/blob/master/Screenshots/pic1.png
+![](https://github.com/HYIND/Tiny_Translation/blob/master/Screenshots/pic1.png)
