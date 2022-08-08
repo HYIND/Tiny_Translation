@@ -16,11 +16,12 @@ public:
     Ui::delimit_window *back_ui = nullptr;
 
     QWidget *back_widget = nullptr;
-//    QMainWindow* pmainwindow;
+    //    QMainWindow* pmainwindow;
 
     Translator(){}
     void Tranlate_front();
     bool TranslateByGoogle(QString& in,QString& out,QString intype="en",QString outtype="zh_CN");
+    bool TranslateByYoudao(QString& in,QString& out,QString intype="EN",QString outtype="ZH_CN");
     void Tranlate_back_emit();
 signals:
     void back_tran();

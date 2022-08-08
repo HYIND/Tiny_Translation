@@ -45,25 +45,28 @@ delimit_window::~delimit_window()
 
 void delimit_window::tran_finish(QString &string,QMimeData* oldmimedata)
 {
-    ui->textBrowser->setText(string);
-    //    QFontMetrics fm(ui->textBrowser->font());
-    //    QRect rec = fm.boundingRect("字");
-    //    //字符串所占的像素宽度,高度
-    //    int textWidth = rec.width();
-    //    int textHeight = rec.height();
-    //    qDebug()<<textWidth<<textHeight;
+    if(!string.isEmpty())
+    {
+        ui->textBrowser->setText(string);
+        //    QFontMetrics fm(ui->textBrowser->font());
+        //    QRect rec = fm.boundingRect("字");
+        //    //字符串所占的像素宽度,高度
+        //    int textWidth = rec.width();
+        //    int textHeight = rec.height();
+        //    qDebug()<<textWidth<<textHeight;
 
-    //   int textperline=300/textWidth;
-    //   int width=(ui->textBrowser->toPlainText().length()) * textWidth<300?
-    //               (ui->textBrowser->toPlainText().length()) * textWidth:300;
-    //   int height=textHeight*(ui->textBrowser->toPlainText().length()/textperline+1);
-    //   qDebug()<<width<<height;
-    //   ui->textBrowser->resize(width,height);
-    this->move(MoveX/Scale+10,MoveY/Scale+10);
-    this->show();
+        //   int textperline=300/textWidth;
+        //   int width=(ui->textBrowser->toPlainText().length()) * textWidth<300?
+        //               (ui->textBrowser->toPlainText().length()) * textWidth:300;
+        //   int height=textHeight*(ui->textBrowser->toPlainText().length()/textperline+1);
+        //   qDebug()<<width<<height;
+        //   ui->textBrowser->resize(width,height);
+        this->move(MoveX/Scale+10,MoveY/Scale+10);
+        this->show();
+    }
 
     QClipboard* clipboard=QApplication::clipboard();
     clipboard->setMimeData(oldmimedata);       //恢复剪切板
-    //    delete oldmimedata;
+    delete oldmimedata;
 }
 
