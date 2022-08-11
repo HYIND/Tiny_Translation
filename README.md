@@ -6,6 +6,6 @@
 
 划词开关快捷键（Ctrl+Alt+T），后续将会支持自定义。
 
-目前使用的是Google翻译的API，需科学上网，后续将会支持其他API。
+目前已支持谷歌翻译API（需科学上网）和有道翻译API。
 
 ![](https://github.com/HYIND/Tiny_Translation/blob/master/Screenshots/pic1.png)
