@@ -20,8 +20,8 @@ public:
 
     Translator(){}
     void Tranlate_front();
-    bool TranslateByGoogle(QString& in,QString& out,QString intype="en",QString outtype="zh_CN");
-    bool TranslateByYoudao(QString& in,QString& out,QString intype="EN",QString outtype="ZH_CN");
+    bool TranslateByGoogle(QString& in,QString& out,QString intype="auto",QString outtype="auto");
+    bool TranslateByYoudao(QString& in,QString& out,QString intype="AUTO",QString outtype="AUTO");
     void Tranlate_back_emit();
 signals:
     void back_tran();

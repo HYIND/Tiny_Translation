@@ -239,7 +239,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="Resource/Resource.qrc">
+             <iconset resource="../Resource/Resource.qrc">
               <normaloff>:/switch.png</normaloff>:/switch.png</iconset>
             </property>
             <property name="iconSize">
@@ -372,7 +372,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="Resource/Resource.qrc"/>
+  <include location="../Resource/Resource.qrc"/>
  </resources>
  <connections/>
 </ui>

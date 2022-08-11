@@ -15,23 +15,28 @@ LIBS += \
     -lUser32
 
 SOURCES += \
-    MouseHook.cpp \
-    MyTextBrowser.cpp \
-    Translator.cpp \
-    delimit_window.cpp \
-    main.cpp \
-    mainwindow.cpp
+#    src/*.cpp
+   src/MouseHook.cpp \
+   src/MyTextBrowser.cpp \
+   src/Translator.cpp \
+   src/delimit_window.cpp \
+   src/main.cpp \
+   src/mainwindow.cpp
 
 HEADERS += \
-    MouseHook.h \
-    MyTextBrowser.h \
-    Translator.h \
-    delimit_window.h \
-    mainwindow.h
+#    include/*.h
+    include/MouseHook.h \
+    include/MyTextBrowser.h \
+    include/Translator.h \
+    include/delimit_window.h \
+    include/mainwindow.h
 
 FORMS += \
-    delimit_window.ui \
-    mainwindow.ui
+    ui/delimit_window.ui \
+    ui/mainwindow.ui
+
+INCLUDEPATH += \
+    include
 
 # Default rules for deployment.
 TARGET=TinyTranslation

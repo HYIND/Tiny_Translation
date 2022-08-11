@@ -18,6 +18,9 @@
 #include <windows.h>
 #include <QWaitcondition>
 #include <QTextCodec>
+#include <QRandomGenerator>
+#include <string>
+#include <QCryptographicHash>
 
 Translator tran;
 
@@ -42,8 +45,8 @@ void Translator::Tranlate_front()
     {
     case 0:
     {
-        QString intype=main_ui->label->text()=="英语"?"en":"zh_CN";
-        QString outtype=main_ui->label_2->text()=="英语"?"en":"zh_CN";
+        QString intype=main_ui->label->text()=="英语"?"en":"zh-CN";
+        QString outtype=main_ui->label_2->text()=="英语"?"en":"zh-CN";
 
         if(!TranslateByGoogle(SourceText,TargetText,intype,outtype))
         {
@@ -53,8 +56,8 @@ void Translator::Tranlate_front()
     }
     case 1:
     {
-        QString intype=main_ui->label->text()=="英语"?"EN":"ZH_CN";
-        QString outtype=main_ui->label_2->text()=="英语"?"EN":"ZH_CN";
+        QString intype=main_ui->label->text()=="英语"?"en":"zh-CHS";
+        QString outtype=main_ui->label_2->text()=="英语"?"en":"zh-CHS";
 
         if(!TranslateByYoudao(SourceText,TargetText,intype,outtype))
         {
@@ -156,17 +159,65 @@ bool Translator::TranslateByGoogle(QString& in,QString& out,QString intype,QStri
 bool Translator::TranslateByYoudao(QString& in,QString& out,QString intype,QString outtype)
 {
     QNetworkRequest request;
-    //    request.setUrl(QUrl("http://fanyi.youdao.com/translate?&doctype=json&type=EN2ZH_CN&i=你好"));
-
+    if(intype=="AUTO")
+        request.setUrl(QUrl("http://fanyi.youdao.com/translate?&doctype=json&i="+in));
     request.setUrl(QUrl("http://fanyi.youdao.com/translate?&doctype=json&type="+intype+"2"+outtype+"&i="+in));
+    //    request.setUrl(QUrl("http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule"));
 
-    request.setRawHeader("User_Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0");
+    //    QDateTime time = QDateTime::currentDateTime();
+    //    qint64 t= time.toMSecsSinceEpoch();     //时间戳
+
+    //    request.setRawHeader("Cookie","OUTFOX_SEARCH_USER_ID=-90618124@10.110.96.158; JSESSIONID=abc02ZkRA6Zp7_uFgjDhy; OUTFOX_SEARCH_USER_ID_NCOO=736067356.8751284; YOUDAO_FANYI_SELECTOR=OFF; SESSION_FROM_COOKIE=test; ___rl__test__cookies="
+    //                         +QString::number(t-1).toUtf8());
+    //    request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+    //    request.setRawHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36 Edg/104.0.1293.47");
+    ////    request.setRawHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+    //    request.setRawHeader("Accept-Encoding" ,"gzip, deflate, br");
+    //    request.setRawHeader("Accept-Language","zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+    //    request.setRawHeader("Connection", "keep-alive");
+    //    request.setRawHeader("Content-Length", "337");
+    //            request.setRawHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
+    //    request.setRawHeader("DNT", "1");
+    //    request.setRawHeader("Host", "fanyi.youdao.com");
+    //    request.setRawHeader("Origin", "http://fanyi.youdao.com");
+    //    request.setRawHeader("Referer", "http://fanyi.youdao.com/");
+    //    request.setRawHeader("sec-ch-ua", "\"Chromium\";v=\"104\", \" Not A;Brand\";v=\"99\", \"Microsoft Edge\";v=\"104\"");
+    //    request.setRawHeader("sec-ch-ua-mobile", "?0");
+    //    request.setRawHeader("sec-ch-ua-platform", "\"Windows\"");
+    //    request.setRawHeader("Sec-Fetch-Dest", "empty" );
+    //    request.setRawHeader("Sec-Fetch-Mode","cors");
+    //    request.setRawHeader("Sec-Fetch-Site", "same-origin");
+    //    request.setRawHeader("X-Requested-With", "XMLHttpRequest");
+
+
+    //    QRandomGenerator* rand=new QRandomGenerator();
+    //    std::string lts= QString::number(t).toStdString();  //时间戳
+    //    std::string salt = lts + QString::number(rand->bounded(0,10)).toStdString(); //当前时间戳+随机数
+    //    QString s="fanyideskweb"+in+QString::fromStdString(salt)+"Ygy_4c=r#e#4EX^NUGUc5";
+
+    //计算sign 的 MD5值
+    //    std::string youdao_sign = QCryptographicHash::hash(s.toLatin1(),QCryptographicHash::Md5).toHex().toStdString();
+
+    //    std::string data;
+    //    data.clear();
+    //    data.append("i=");data.append(in.toStdString());
+    //    data.append("&from=");data.append(intype.toStdString());data.append("&to=");data.append(outtype.toStdString());
+    //    data.append("&smartresult=dict&smartresult=rule&client=fanyideskweb&salt=");data.append(salt);
+    //    data.append("&sign=");data.append(youdao_sign);
+    //    data.append("&lts=");data.append(lts);
+    //    data.append("&bv=3e20416a29e1d1549139291c2bf51e5a&doctype=json&version=2.1&keyfrom=fanyi.web&action=FY_BY_CLICKBUTTION");
+
 
     QTimer timer;
     timer.setInterval(5000);  // 设置超时时间 5 秒
     timer.setSingleShot(true);  // 单次触发
+
+
     QNetworkAccessManager networkManager;
+
     QNetworkReply *pReply = networkManager.get(request);
+    //    QNetworkReply *pReply=networkManager.post(request, QString::fromStdString(data).toUtf8());
+
     QEventLoop loop;
     connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
     connect(pReply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -187,7 +238,6 @@ bool Translator::TranslateByYoudao(QString& in,QString& out,QString intype,QStri
         {
 
             QByteArray data = pReply->readAll();
-
             //如果有错误的序列号
             int errorIndex = data.indexOf("error_code");
             if (errorIndex != -1)
