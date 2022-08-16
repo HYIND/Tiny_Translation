@@ -71,7 +71,6 @@ bool MainWindow::nativeEventFilter(const QByteArray &eventType, void *message, q
                 on_Switch_Delimit_clicked();
                 break;
             default:
-                qDebug() << "被注入了其他热键.";
                 break;
             }
             return true;
@@ -88,13 +87,30 @@ void MainWindow::Myclose()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    static QMessageBox MsgBox(QMessageBox::Question, "确认", "是否要关闭程序？");
+    static QPushButton *button1= (MsgBox.addButton(QString("是"), QMessageBox::AcceptRole));
+    static QPushButton *button2=(MsgBox.addButton("否",QMessageBox::NoRole));
+    static QPushButton *button3= (MsgBox.addButton(QString("最小化到托盘"), QMessageBox::ActionRole));
     if(isexit)
     {
         pdw->close();
         event->accept();
         UnregisterHotKey((HWND)this->winId(),HOT_KEY_ALT_CTRL_T);
+        return;
     }
-    else
+
+    MsgBox.exec();
+    if(button1==MsgBox.clickedButton())
+    {
+        pdw->close();
+        event->accept();
+        UnregisterHotKey((HWND)this->winId(),HOT_KEY_ALT_CTRL_T);
+    }
+    else if(button2==MsgBox.clickedButton())
+    {
+        event->ignore();
+    }
+    else if(button3==MsgBox.clickedButton())
     {
         event->ignore();
         this->hide();
@@ -139,6 +155,7 @@ void MainWindow::on_Switch_Delimit_clicked()
     }
     else
     {
+        pdw->hide();
         ui->Switch_Delimit->setText("开启划词");
         toggle_action->setText("开启划词");
         mSysTrayIcon->setToolTip("Tiny Translation\n划词翻译已关闭\n开启快捷键：CTRL+ALT+T");
